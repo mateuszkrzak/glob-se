@@ -1,3 +1,117 @@
-<p>
-  finder works!
-</p>
+<form novalidate (ngSubmit)="onSubmit(shipment)" [formGroup]="shipment">
+
+  <div class="form-group row">
+    <label class="col-2  col-form-label">
+      Wysokość
+    </label>
+    <div class="col-10">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="wysokość [cm]"
+        formControlName="height">
+      <div class="error" *ngIf="shipment.get('height').touched && shipment.get('height').hasError('required')">
+        Pole jest wymagane
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2  col-form-label">
+      Szerokość
+    </label>
+    <div class="col-10">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="szerokość [cm]"
+        formControlName="width">
+      <div class="error" *ngIf="shipment.get('width').touched && shipment.get('width').hasError('required')">
+        Pole jest wymagane
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2  col-form-label">
+      Długość
+    </label>
+    <div class="col-10">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="długość [cm]"
+        formControlName="length">
+      <div class="error" *ngIf="shipment.get('length').touched && shipment.get('length').hasError('required')">
+        Pole jest wymagane
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2  col-form-label">
+      Waga
+    </label>
+    <div class="col-10">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="waga [kg]"
+        formControlName="weight">
+      <div class="error" *ngIf="shipment.get('weight').touched && shipment.get('weight').hasError('required')">
+        Pole jest wymagane
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2  col-form-label">
+      Ilość paczek
+    </label>
+    <div class="col-10">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="ilość paczek"
+        formControlName="quantity">
+      <div class="error" *ngIf="shipment.get('quantity').touched && shipment.get('quantity').hasError('required')">
+        Pole jest wymagane
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2  col-form-label">
+      Kraj nadawcy
+    </label>
+    <div class="col-10">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="1"
+        formControlName="senderCountryId">
+      <div class="error" *ngIf="shipment.get('senderCountryId').touched && shipment.get('senderCountryId').hasError('required')">
+        Pole jest wymagane
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2  col-form-label">
+      Kraj odbiorcy
+    </label>
+    <div class="col-10">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="1"
+        formControlName="receiverCountryId">
+      <div class="error" *ngIf="shipment.get('receiverCountryId').touched && shipment.get('receiverCountryId').hasError('required')">
+        Pole jest wymagane
+      </div>
+    </div>
+  </div>
+
+  <!--<button class="btn btn-primary" type="submit">Szukaj</button>-->
+  <button class="btn btn-primary" type="submit" [disabled]="shipment.invalid">Szukaj</button>
+</form>
