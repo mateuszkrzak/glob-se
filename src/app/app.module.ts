@@ -14,13 +14,19 @@ import { ProductService } from './shared/services/product.service';
 import { CountryService } from './shared/services/country.service';
 import { EndpointService } from './shared/services/endpoint.service';
 import { AppRoutingModule } from './app-routing.module';
+import { ProductCategoriesPipe } from './shared/pipes/productCategories.pipe';
+import { ProductPipe } from './shared/pipes/product.pipe';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FinderComponent,
     AboutComponent,
-    SearchResultComponent
+    SearchResultComponent,
+    ProductCategoriesPipe,
+    ProductPipe,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
