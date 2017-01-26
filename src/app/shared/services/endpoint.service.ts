@@ -4,8 +4,6 @@ import { Injectable } from '@angular/core';
 export class EndpointService {
   backendUrl = "http://test.api.globkurier.pl/v1/";
 
-  constructor() { }
-
   getEndpoint () {
     return this.backendUrl;
   }
