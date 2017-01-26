@@ -3,9 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { URLSearchParams } from '@angular/http';
 import { ProductService } from "../shared/services/product.service";
-import { ProductCategories } from '../shared/models/productCategories';
-import { Product } from '../shared/models/product';
-import { Observable } from 'rxjs/Observable';
+
 
 @Component({
   selector: 'app-search-result',
@@ -31,13 +29,16 @@ export class SearchResultComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.productService.getProducts(searchParams)
-      .subscribe(
-        productCategories => {
-          this.productCategories = productCategories;
-          console.log(productCategories)
-        }
-      );
+    // this.productService.getProducts(searchParams)
+    //   .subscribe(
+    //     productCategories => {
+    //       this.productCategories = productCategories;
+    //       console.log(productCategories)
+    //     },
+    //     error => {
+    //       console.log("blad: " + error)
+    //     }
+    //   );
 
   }
 

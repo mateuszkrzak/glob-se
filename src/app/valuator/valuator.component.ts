@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from "../shared/services/product.service";
+import { URLSearchParams } from '@angular/http';
 
 @Component({
   selector: 'app-valuator',
@@ -11,7 +12,7 @@ import { ProductService } from "../shared/services/product.service";
 })
 export class ValuatorComponent implements OnInit {
   shipment: FormGroup;
-
+  productCategories;
   constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router) { }
 
   ngOnInit() {
@@ -30,11 +31,32 @@ export class ValuatorComponent implements OnInit {
   }
 
   onSubmit() {
+
+    //
     let params = {};
     for (var prop in this.shipment.value) {
       if (this.shipment.value[prop] || this.shipment.value[prop] !== null)      params[prop] = this.shipment.value[prop];
     }
-    this.router.navigate( ['/search'],  { queryParams: params } );
+    //
+
+    let searchParams: URLSearchParams = new URLSearchParams();
+
+
+      for (var prop in params) {
+        searchParams.set(prop, params[prop]);
+      }
+    this.productService.getProducts(searchParams)
+      .subscribe(
+        productCategories => {
+          console.log(productCategories);
+          this.productCategories = productCategories;
+        },
+        error => {
+          console.log("blad: " + error)
+        }
+      );
+
+    this.router.navigate( ['/home'],  { queryParams: params } );
 
   }
 
