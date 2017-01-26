@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { FinderComponent } from './finder/finder.component';
+import { ValuatorComponent } from './valuator/valuator.component';
 import { AboutComponent } from './about/about.component';
 import { SearchResultComponent } from './search-result/search-result.component';
 
@@ -21,7 +21,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 @NgModule({
   declarations: [
     AppComponent,
-    FinderComponent,
+    ValuatorComponent,
     AboutComponent,
     SearchResultComponent,
     ProductCategoriesPipe,

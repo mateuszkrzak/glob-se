@@ -2,14 +2,14 @@ import { NgModule }              from '@angular/core';
 import { RouterModule, Routes }  from '@angular/router';
 
 import { AboutComponent } from './about/about.component';
-import { FinderComponent } from './finder/finder.component';
+import { ValuatorComponent } from './valuator/valuator.component';
 import { SearchResultComponent } from './search-result/search-result.component';
 
 const routes: Routes = [
   { path: "about", component: AboutComponent},
-  { path: "home", component: FinderComponent},
+  { path: "home", component: ValuatorComponent},
   { path: "search", component: SearchResultComponent},
-  { path: "**", component: FinderComponent}
+  { path: "**", component: ValuatorComponent}
 ];
 @NgModule({
   imports: [

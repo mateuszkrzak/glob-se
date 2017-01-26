@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from "../shared/services/product.service";
 
 @Component({
-  selector: 'app-finder',
-  templateUrl: 'finder.component.html',
-  styleUrls: ['finder.component.scss'],
+  selector: 'app-valuator',
+  templateUrl: 'valuator.component.html',
+  styleUrls: ['valuator.component.scss'],
   providers: [ProductService]
 })
-export class FinderComponent implements OnInit {
+export class ValuatorComponent implements OnInit {
   shipment: FormGroup;
 
   constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router) { }
