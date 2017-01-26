@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from "../shared/services/product.service";
-import { URLSearchParams } from '@angular/http';
-import { ProductCategories } from '../shared/models/productCategories'
 
 @Component({
   selector: 'app-finder',
@@ -12,9 +11,8 @@ import { ProductCategories } from '../shared/models/productCategories'
 })
 export class FinderComponent implements OnInit {
   shipment: FormGroup;
-  productCategories: ProductCategories[];
 
-  constructor(private formBuilder:FormBuilder, private productService:ProductService ) { }
+  constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router) { }
 
   ngOnInit() {
     this.shipment = this.formBuilder.group({
@@ -31,22 +29,13 @@ export class FinderComponent implements OnInit {
 
   }
 
-
   onSubmit() {
-    let params: URLSearchParams = new URLSearchParams();
-
+    let params = {};
     for (var prop in this.shipment.value) {
-      if (this.shipment.value[prop] || this.shipment.value[prop] !== null)      params.set(prop, this.shipment.value[prop]);
+      if (this.shipment.value[prop] || this.shipment.value[prop] !== null)      params[prop] = this.shipment.value[prop];
     }
+    this.router.navigate( ['/search'],  { queryParams: params } );
 
-    this.productService.getProducts(params)
-      .subscribe(
-        productCategories => {
-          this.productCategories = productCategories;
-          console.log(productCategories)
-        }
-      )
   }
-
 
 }

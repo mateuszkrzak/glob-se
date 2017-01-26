@@ -1,3 +1,32 @@
-<p>
-  search-result works!
-</p>
+<div class="row">
+  <div *ngFor="let item of productCategories | productCategories" class="col-12 col-sm-4 product-category-wrapper">
+        <div class="product-category-title text-center text-capitalize">
+          {{item.title}}
+        </div>
+        <div class="product-list">
+          <div *ngFor="let products of item.products | product">
+
+            <div *ngFor="let product of products">
+              <div class="product-wrapper">
+                <figure>
+                  <img [src]="product.carrierLogoLink" />
+                  <figcaption>{{product.carrierName}}</figcaption>
+                </figure>
+
+                <div class="product-name">
+                  {{product.name}}
+                </div>
+                <div class="product-price">
+                  {{product.netPrice}} PLN ({{product.grossPrice}} PLN brutto)
+                </div>
+              </div>
+
+
+
+            </div>
+
+          </div>
+        </div>
+  </div>
+</div>
+

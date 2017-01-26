@@ -8,6 +8,7 @@ import { SearchResultComponent } from './search-result/search-result.component';
 const routes: Routes = [
   { path: "about", component: AboutComponent},
   { path: "home", component: FinderComponent},
+  { path: "search", component: SearchResultComponent},
   { path: "**", component: FinderComponent}
 ];
 @NgModule({
