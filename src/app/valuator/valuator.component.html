@@ -91,11 +91,11 @@
       Kraj nadawcy
     </label>
     <div class="col-10">
-      <input
-        class="form-control"
-        type="number"
-        placeholder="1"
-        formControlName="senderCountryId">
+      <select class="form-control" formControlName="senderCountryId">
+        <option *ngFor="let country of countries" [ngValue]="country.id">
+          {{country.name}}
+        </option>
+      </select>
       <div class="error" *ngIf="( shipment.get('senderCountryId').touched && shipment.get('senderCountryId').hasError('required'))
       || validationErrors.senderCountryId !== errorMsgReq">
         {{validationErrors.senderCountryId}}
@@ -108,11 +108,11 @@
       Kraj odbiorcy
     </label>
     <div class="col-10">
-      <input
-        class="form-control"
-        type="number"
-        placeholder="1"
-        formControlName="receiverCountryId">
+      <select class="form-control" formControlName="receiverCountryId">
+        <option *ngFor="let country of countries" [ngValue]="country.id">
+          {{country.name}}
+        </option>
+      </select>
       <div class="error" *ngIf="( shipment.get('receiverCountryId').touched && shipment.get('receiverCountryId').hasError('required'))
       || validationErrors.receiverCountryId !== errorMsgReq">
         {{validationErrors.receiverCountryId}}
@@ -120,5 +120,7 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" type="submit" [disabled]="shipment.invalid">Szukaj</button>
+  <div class="text-right">
+    <button class="btn btn-primary" type="submit" [disabled]="shipment.invalid">Szukaj</button>
+  </div>
 </form >

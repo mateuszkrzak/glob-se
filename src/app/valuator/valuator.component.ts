@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from "../shared/services/product.service";
+import { CountryService } from "../shared/services/country.service";
 import { URLSearchParams } from '@angular/http';
 import { Location } from '@angular/common'
 
@@ -16,12 +17,18 @@ export class ValuatorComponent implements OnInit {
   private shipment: FormGroup;
   private isDataFetched:boolean = false;
 
-  private validationErrors={};
+  private validationErrors;
   private errorMsgReq:string;
   public productCategories;
+  public countries;
   private sub: Subscription;
 
-  constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router, private route: ActivatedRoute, private location:Location) { }
+  constructor(private formBuilder:FormBuilder,
+              private productService:ProductService,
+              private countryService:CountryService,
+              private router:Router,
+              private route: ActivatedRoute,
+              private location:Location) { }
 
   ngOnInit() {
     this.errorMsgReq = 'Pole jest wymagane';
@@ -52,11 +59,8 @@ export class ValuatorComponent implements OnInit {
         this.fetchProducts(params);
         this.isDataFetched = true;
       }
-      else{
-      }
-
     });
-
+    this.fetchCountries();
   }
 
   onSubmit() {
@@ -91,7 +95,18 @@ export class ValuatorComponent implements OnInit {
           this.isDataFetched = false;
         }
       );
+  }
 
+  fetchCountries():void  {
+    this.countryService.getCountries()
+      .subscribe(
+        countries => {
+          this.countries = countries;
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 
   getUrlSearchParams(params):URLSearchParams{
