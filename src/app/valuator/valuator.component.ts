@@ -16,7 +16,7 @@ export class ValuatorComponent implements OnInit {
   shipment: FormGroup;
   isDataFetched:boolean = false;
 
-  productCategories;
+  public productCategories;
   private sub: Subscription;
 
   constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router, private route: ActivatedRoute, private location:Location) { }
@@ -44,9 +44,6 @@ export class ValuatorComponent implements OnInit {
 
     });
 
-    if(!this.isDataFetched){
-
-    }
   }
 
   onSubmit() {
