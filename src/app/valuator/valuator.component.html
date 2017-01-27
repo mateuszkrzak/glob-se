@@ -11,8 +11,9 @@
         type="number"
         placeholder="wysokość [cm]"
         formControlName="height">
-      <div class="error" *ngIf="shipment.get('height').touched && shipment.get('height').hasError('required')">
-        Pole jest wymagane
+      <div class="error" *ngIf="( shipment.get('height').touched && shipment.get('height').hasError('required'))
+      || validationErrors.height !== errorMsgReq">
+        {{validationErrors.height}}
       </div>
     </div>
   </div>
@@ -27,8 +28,9 @@
         type="number"
         placeholder="szerokość [cm]"
         formControlName="width">
-      <div class="error" *ngIf="shipment.get('width').touched && shipment.get('width').hasError('required')">
-        Pole jest wymagane
+      <div class="error" *ngIf="( shipment.get('width').touched && shipment.get('width').hasError('required'))
+      || validationErrors.width !== errorMsgReq">
+        {{validationErrors.width}}
       </div>
     </div>
   </div>
@@ -43,8 +45,9 @@
         type="number"
         placeholder="długość [cm]"
         formControlName="length">
-      <div class="error" *ngIf="shipment.get('length').touched && shipment.get('length').hasError('required')">
-        Pole jest wymagane
+      <div class="error" *ngIf="( shipment.get('length').touched && shipment.get('length').hasError('required'))
+      || validationErrors.length !== errorMsgReq">
+        {{validationErrors.length}}
       </div>
     </div>
   </div>
@@ -59,8 +62,9 @@
         type="number"
         placeholder="waga [kg]"
         formControlName="weight">
-      <div class="error" *ngIf="shipment.get('weight').touched && shipment.get('weight').hasError('required')">
-        Pole jest wymagane
+      <div class="error" *ngIf="( shipment.get('weight').touched && shipment.get('weight').hasError('required'))
+      || validationErrors.weight !== errorMsgReq">
+        {{validationErrors.weight}}
       </div>
     </div>
   </div>
@@ -75,8 +79,9 @@
         type="number"
         placeholder="ilość paczek"
         formControlName="quantity">
-      <div class="error" *ngIf="shipment.get('quantity').touched && shipment.get('quantity').hasError('required')">
-        Pole jest wymagane
+      <div class="error" *ngIf="( shipment.get('quantity').touched && shipment.get('quantity').hasError('required'))
+      || validationErrors.quantity !== errorMsgReq">
+        {{validationErrors.quantity}}
       </div>
     </div>
   </div>
@@ -91,8 +96,9 @@
         type="number"
         placeholder="1"
         formControlName="senderCountryId">
-      <div class="error" *ngIf="shipment.get('senderCountryId').touched && shipment.get('senderCountryId').hasError('required')">
-        Pole jest wymagane
+      <div class="error" *ngIf="( shipment.get('senderCountryId').touched && shipment.get('senderCountryId').hasError('required'))
+      || validationErrors.senderCountryId !== errorMsgReq">
+        {{validationErrors.senderCountryId}}
       </div>
     </div>
   </div>
@@ -107,8 +113,9 @@
         type="number"
         placeholder="1"
         formControlName="receiverCountryId">
-      <div class="error" *ngIf="shipment.get('receiverCountryId').touched && shipment.get('receiverCountryId').hasError('required')">
-        Pole jest wymagane
+      <div class="error" *ngIf="( shipment.get('receiverCountryId').touched && shipment.get('receiverCountryId').hasError('required'))
+      || validationErrors.receiverCountryId !== errorMsgReq">
+        {{validationErrors.receiverCountryId}}
       </div>
     </div>
   </div>

@@ -13,15 +13,28 @@ import { Location } from '@angular/common'
   providers: [ProductService]
 })
 export class ValuatorComponent implements OnInit {
-  shipment: FormGroup;
-  isDataFetched:boolean = false;
+  private shipment: FormGroup;
+  private isDataFetched:boolean = false;
 
+  private validationErrors={};
+  private errorMsgReq:string;
   public productCategories;
   private sub: Subscription;
 
   constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router, private route: ActivatedRoute, private location:Location) { }
 
   ngOnInit() {
+    this.errorMsgReq = 'Pole jest wymagane';
+    this.validationErrors={
+        width: this.errorMsgReq,
+        height: this.errorMsgReq,
+        length: this.errorMsgReq,
+        weight: this.errorMsgReq,
+        quantity: this.errorMsgReq,
+        receiverCountryId: this.errorMsgReq,
+        senderCountryId: this.errorMsgReq
+      };
+
     this.shipment = this.formBuilder.group({
       width: ['', Validators.required],
       height: ['', Validators.required],
@@ -51,7 +64,6 @@ export class ValuatorComponent implements OnInit {
     this.location.go("valuator", query);
 
     this.fetchProducts(this.shipment.value);
-    this.isDataFetched = true;
 
     //this.router.navigate( ['/valuator'],  { queryParams: this.shipment.value } );
   }
@@ -71,11 +83,15 @@ export class ValuatorComponent implements OnInit {
         productCategories => {
           console.log(productCategories);
           this.productCategories = productCategories;
+          this.isDataFetched = true;
         },
         error => {
-          console.log("blad: " + error)
+          this.validationErrors = JSON.parse(error).fields;
+          console.log(this.validationErrors);
+          this.isDataFetched = false;
         }
       );
+
   }
 
   getUrlSearchParams(params):URLSearchParams{
