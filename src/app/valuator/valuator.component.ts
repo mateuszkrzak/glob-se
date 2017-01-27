@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from "../shared/services/product.service";
 import { URLSearchParams } from '@angular/http';
+import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-valuator',
@@ -12,8 +14,12 @@ import { URLSearchParams } from '@angular/http';
 })
 export class ValuatorComponent implements OnInit {
   shipment: FormGroup;
+  isDataFetched:boolean = false;
+
   productCategories;
-  constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router) { }
+  private sub: Subscription;
+
+  constructor(private formBuilder:FormBuilder, private productService:ProductService, private router:Router, private route: ActivatedRoute, private location:Location) { }
 
   ngOnInit() {
     this.shipment = this.formBuilder.group({
@@ -28,24 +34,42 @@ export class ValuatorComponent implements OnInit {
       // receiverPostCode: ['', Validators.pattern('[0-9]{2}-[0-9]{3}')]
     });
 
+    this.sub = this.route.queryParams.subscribe((params: Params) => {
+      if('height' && 'width' && 'length' && 'weight' && 'quantity' && 'receiverCountryId' && 'senderCountryId' in params){
+        this.fetchProducts(params);
+        this.isDataFetched = true;
+      }
+      else{
+      }
+
+    });
+
+    if(!this.isDataFetched){
+
+    }
   }
 
   onSubmit() {
+    let query = this.mapToQuery(this.getUrlSearchParams(this.shipment.value).paramsMap);
+    this.location.go("valuator", query);
 
-    //
-    let params = {};
-    for (var prop in this.shipment.value) {
-      if (this.shipment.value[prop] || this.shipment.value[prop] !== null)      params[prop] = this.shipment.value[prop];
-    }
-    //
+    this.fetchProducts(this.shipment.value);
+    this.isDataFetched = true;
 
-    let searchParams: URLSearchParams = new URLSearchParams();
+    //this.router.navigate( ['/valuator'],  { queryParams: this.shipment.value } );
+  }
 
+  mapToQuery(map):string{
+    let query:string='';
+    map.forEach((value, key, i, ) => {
+      query += key + "=" + value[0] + "&";
+    });
 
-      for (var prop in params) {
-        searchParams.set(prop, params[prop]);
-      }
-    this.productService.getProducts(searchParams)
+    return query.substring(0, query.length-1);
+  }
+
+  fetchProducts(params):void  {
+    this.productService.getProducts(this.getUrlSearchParams(params))
       .subscribe(
         productCategories => {
           console.log(productCategories);
@@ -55,9 +79,18 @@ export class ValuatorComponent implements OnInit {
           console.log("blad: " + error)
         }
       );
-
-    this.router.navigate( ['/home'],  { queryParams: params } );
-
   }
 
+  getUrlSearchParams(params):URLSearchParams{
+    let searchParams: URLSearchParams = new URLSearchParams();
+    for (var prop in params) {
+      searchParams.set(prop, params[prop]);
+    }
+
+    return searchParams;
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
 }
