@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from "../shared/services/product.service";
 import { CountryService } from "../shared/services/country.service";
 import { URLSearchParams } from '@angular/http';
@@ -16,9 +16,10 @@ import { Location } from '@angular/common'
 export class ValuatorComponent implements OnInit {
   private shipment: FormGroup;
   private isDataFetched:boolean = false;
+  private isFastShipment:boolean = false;
 
   private validationErrors;
-  private errorMsgReq:string;
+  private errorMsg;
   public productCategories;
   public countries;
   private sub: Subscription;
@@ -31,27 +32,38 @@ export class ValuatorComponent implements OnInit {
               private location:Location) { }
 
   ngOnInit() {
-    this.errorMsgReq = 'Pole jest wymagane';
+    this.errorMsg={
+      required: 'Pole wymagane',
+      postCode: 'Kod pocztowy w nieodpowiednim formacie'
+    }
+
     this.validationErrors={
-        width: this.errorMsgReq,
-        height: this.errorMsgReq,
-        length: this.errorMsgReq,
-        weight: this.errorMsgReq,
-        quantity: this.errorMsgReq,
-        receiverCountryId: this.errorMsgReq,
-        senderCountryId: this.errorMsgReq
+        width: this.errorMsg.required,
+        height: this.errorMsg.required,
+        length: this.errorMsg.required,
+        weight: this.errorMsg.required,
+        quantity: this.errorMsg.required,
+        receiverCountryId: this.errorMsg.required,
+        senderCountryId: this.errorMsg.required,
+        senderPostCode: this.errorMsg.postCode,
+        receiverPostCode: this.errorMsg.postCode
       };
 
     this.shipment = this.formBuilder.group({
-      width: ['', Validators.required],
-      height: ['', Validators.required],
-      length: ['', Validators.required],
-      weight: ['', Validators.required],
-      quantity: ['', Validators.required],
-      receiverCountryId: ['', Validators.required],
-      senderCountryId: ['', Validators.required]
-      // senderPostCode: ['', Validators.pattern('[0-9]{2}-[0-9]{3}')],
-      // receiverPostCode: ['', Validators.pattern('[0-9]{2}-[0-9]{3}')]
+      basic: this.formBuilder.group({
+        width: ['', Validators.required],
+        height: ['', Validators.required],
+        length: ['', Validators.required],
+        weight: ['', Validators.required],
+        quantity: ['', Validators.required],
+        receiverCountryId: ['', Validators.required],
+        senderCountryId: ['', Validators.required]
+      }),
+      isFastShipment: '',
+      extra: this.formBuilder.group({
+        senderPostCode: ['', Validators.pattern('[0-9]{2}\-[0-9]{3}')],
+        receiverPostCode: ['', Validators.pattern('[0-9]{2}\-[0-9]{3}')]
+      })
     });
 
     this.sub = this.route.queryParams.subscribe((params: Params) => {
@@ -64,10 +76,19 @@ export class ValuatorComponent implements OnInit {
   }
 
   onSubmit() {
-    let query = this.mapToQuery(this.getUrlSearchParams(this.shipment.value).paramsMap);
+    let shipment;
+    if(this.shipment.value.isFastShipment){
+      shipment = Object.assign(this.shipment.value.basic,this.shipment.value.extra)
+    }
+    else {
+      shipment = this.shipment.value.basic;
+    }
+    console.log(shipment);
+
+    let query = this.mapToQuery(this.getUrlSearchParams(shipment).paramsMap);
     this.location.go("valuator", query);
 
-    this.fetchProducts(this.shipment.value);
+    this.fetchProducts(shipment);
 
     //this.router.navigate( ['/valuator'],  { queryParams: this.shipment.value } );
   }

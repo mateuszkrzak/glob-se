@@ -1,6 +1,8 @@
 <app-search-result [products]="productCategories"></app-search-result>
 
 <form novalidate (ngSubmit)="onSubmit(shipment)" [formGroup]="shipment" *ngIf="!isDataFetched">
+  <div formGroupName="basic">
+
   <div class="form-group row">
     <label class="col-2  col-form-label">
       Wysokość
@@ -11,8 +13,8 @@
         type="number"
         placeholder="wysokość [cm]"
         formControlName="height">
-      <div class="error" *ngIf="( shipment.get('height').touched && shipment.get('height').hasError('required'))
-      || validationErrors.height !== errorMsgReq">
+      <div class="error" *ngIf="( shipment.get('basic.height').touched && shipment.get('basic.height').hasError('required'))
+      || validationErrors.height !== errorMsg.required">
         {{validationErrors.height}}
       </div>
     </div>
@@ -28,8 +30,8 @@
         type="number"
         placeholder="szerokość [cm]"
         formControlName="width">
-      <div class="error" *ngIf="( shipment.get('width').touched && shipment.get('width').hasError('required'))
-      || validationErrors.width !== errorMsgReq">
+      <div class="error" *ngIf="( shipment.get('basic.width').touched && shipment.get('basic.width').hasError('required'))
+      || validationErrors.width !== errorMsg.required">
         {{validationErrors.width}}
       </div>
     </div>
@@ -45,8 +47,8 @@
         type="number"
         placeholder="długość [cm]"
         formControlName="length">
-      <div class="error" *ngIf="( shipment.get('length').touched && shipment.get('length').hasError('required'))
-      || validationErrors.length !== errorMsgReq">
+      <div class="error" *ngIf="( shipment.get('basic.length').touched && shipment.get('basic.length').hasError('required'))
+      || validationErrors.length !== errorMsg.required">
         {{validationErrors.length}}
       </div>
     </div>
@@ -62,8 +64,8 @@
         type="number"
         placeholder="waga [kg]"
         formControlName="weight">
-      <div class="error" *ngIf="( shipment.get('weight').touched && shipment.get('weight').hasError('required'))
-      || validationErrors.weight !== errorMsgReq">
+      <div class="error" *ngIf="( shipment.get('basic.weight').touched && shipment.get('basic.weight').hasError('required'))
+      || validationErrors.weight !== errorMsg.required">
         {{validationErrors.weight}}
       </div>
     </div>
@@ -79,8 +81,8 @@
         type="number"
         placeholder="ilość paczek"
         formControlName="quantity">
-      <div class="error" *ngIf="( shipment.get('quantity').touched && shipment.get('quantity').hasError('required'))
-      || validationErrors.quantity !== errorMsgReq">
+      <div class="error" *ngIf="( shipment.get('basic.quantity').touched && shipment.get('basic.quantity').hasError('required'))
+      || validationErrors.quantity !== errorMsg.required">
         {{validationErrors.quantity}}
       </div>
     </div>
@@ -96,8 +98,8 @@
           {{country.name}}
         </option>
       </select>
-      <div class="error" *ngIf="( shipment.get('senderCountryId').touched && shipment.get('senderCountryId').hasError('required'))
-      || validationErrors.senderCountryId !== errorMsgReq">
+      <div class="error" *ngIf="( shipment.get('basic.senderCountryId').touched && shipment.get('basic.senderCountryId').hasError('required'))
+      || validationErrors.senderCountryId !== errorMsg.required">
         {{validationErrors.senderCountryId}}
       </div>
     </div>
@@ -113,9 +115,58 @@
           {{country.name}}
         </option>
       </select>
-      <div class="error" *ngIf="( shipment.get('receiverCountryId').touched && shipment.get('receiverCountryId').hasError('required'))
-      || validationErrors.receiverCountryId !== errorMsgReq">
+      <div class="error" *ngIf="( shipment.get('basic.receiverCountryId').touched && shipment.get('basic.receiverCountryId').hasError('required'))
+      || validationErrors.receiverCountryId !== errorMsg.required">
         {{validationErrors.receiverCountryId}}
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="form-group">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="isActive" formControlName="isFastShipment">
+        Dostawa w ten sam dzień
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="shipment.value.isFastShipment" formGroupName="extra">
+    <div class="form-group row">
+      <label class="col-2  col-form-label">
+        Kod pocztowy nadawcy
+      </label>
+      <div class="col-10">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="00-001"
+          formControlName="senderPostCode">
+        <div class="error" *ngIf="( shipment.get('extra.senderPostCode').touched && shipment.get('extra.senderPostCode').hasError('required'))
+      || validationErrors.senderPostCode !== errorMsg.postCode">
+          {{validationErrors.senderPostCode}}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="form-group row">
+      <label class="col-2  col-form-label">
+        Kod pocztowy nadawcy
+
+      </label>
+      <div class="col-10">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="00-001"
+          formControlName="receiverPostCode">
+        <div class="error" *ngIf="( shipment.get('extra.receiverPostCode').touched && shipment.get('extra.receiverPostCode').hasError('required'))
+      || validationErrors.receiverPostCode !== errorMsg.postCode">
+          {{validationErrors.receiverPostCode}}
+        </div>
       </div>
     </div>
   </div>
@@ -123,4 +174,4 @@
   <div class="text-right">
     <button class="btn btn-primary" type="submit" [disabled]="shipment.invalid">Szukaj</button>
   </div>
-</form >
+</form>
