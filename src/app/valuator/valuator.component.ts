@@ -123,6 +123,10 @@ export class ValuatorComponent implements OnInit {
       .subscribe(
         countries => {
           this.countries = countries;
+          let polska = this.countries.find(el => el.name === "Polska");
+
+          this.countries.splice(this.countries.indexOf(polska), 1);
+          this.countries.unshift(polska);
         },
         error => {
           console.log(error);
