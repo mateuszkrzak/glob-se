@@ -83,14 +83,11 @@ export class ValuatorComponent implements OnInit {
     else {
       shipment = this.shipment.value.basic;
     }
-    console.log(shipment);
 
     let query = this.mapToQuery(this.getUrlSearchParams(shipment).paramsMap);
     this.location.go("valuator", query);
 
     this.fetchProducts(shipment);
-
-    //this.router.navigate( ['/valuator'],  { queryParams: this.shipment.value } );
   }
 
   mapToQuery(map):string{
@@ -106,13 +103,11 @@ export class ValuatorComponent implements OnInit {
     this.productService.getProducts(this.getUrlSearchParams(params))
       .subscribe(
         productCategories => {
-          console.log(productCategories);
           this.productCategories = productCategories;
           this.isDataFetched = true;
         },
         error => {
           this.validationErrors = JSON.parse(error).fields;
-          console.log(this.validationErrors);
           this.isDataFetched = false;
         }
       );
@@ -129,7 +124,7 @@ export class ValuatorComponent implements OnInit {
           this.countries.unshift(polska);
         },
         error => {
-          console.log(error);
+          console.error(error);
         }
       );
   }
