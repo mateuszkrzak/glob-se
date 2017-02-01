@@ -99,7 +99,7 @@ export class ValuatorComponent implements OnInit, OnDestroy {
   }
 
   mapToQuery(map): string {
-    let query: string;
+    let query = '';
     map.forEach((value, key) => {
       query += key + '=' + value[0] + '&';
     });
