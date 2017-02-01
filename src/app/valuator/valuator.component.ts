@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductService } from "../shared/services/product.service";
-import { CountryService } from "../shared/services/country.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProductService } from '../shared/services/product.service';
+import { CountryService } from '../shared/services/country.service';
 import { URLSearchParams } from '@angular/http';
-import { Location } from '@angular/common'
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-valuator',
@@ -13,31 +13,30 @@ import { Location } from '@angular/common'
   styleUrls: ['valuator.component.scss'],
   providers: [ProductService]
 })
-export class ValuatorComponent implements OnInit {
-  private shipment: FormGroup;
-  private isDataFetched:boolean = false;
-  private isFastShipment:boolean = false;
+export class ValuatorComponent implements OnInit, OnDestroy {
+  public shipment: FormGroup;
+  public isDataFetched: boolean = false;
+  private isFastShipment: boolean = false;
 
-  private validationErrors;
+  public validationErrors;
   private errorMsg;
   public productCategories;
   public countries;
   private sub: Subscription;
 
-  constructor(private formBuilder:FormBuilder,
-              private productService:ProductService,
-              private countryService:CountryService,
-              private router:Router,
+  constructor(private formBuilder: FormBuilder,
+              private productService: ProductService,
+              private countryService: CountryService,
               private route: ActivatedRoute,
-              private location:Location) { }
+              private location: Location) { }
 
   ngOnInit() {
-    this.errorMsg={
+    this.errorMsg = {
       required: 'Pole wymagane',
       postCode: 'Kod pocztowy w nieodpowiednim formacie'
-    }
+    };
 
-    this.validationErrors={
+    this.validationErrors = {
         width: this.errorMsg.required,
         height: this.errorMsg.required,
         length: this.errorMsg.required,
@@ -67,7 +66,7 @@ export class ValuatorComponent implements OnInit {
     });
 
     this.sub = this.route.queryParams.subscribe((params: Params) => {
-      if('height' && 'width' && 'length' && 'weight' && 'quantity' && 'receiverCountryId' && 'senderCountryId' in params){
+      if (this.isAllBasicParams(params, this.shipment.value.basic)) {
         this.fetchProducts(params);
         this.isDataFetched = true;
       }
@@ -77,29 +76,38 @@ export class ValuatorComponent implements OnInit {
 
   onSubmit() {
     let shipment;
-    if(this.shipment.value.isFastShipment){
-      shipment = Object.assign(this.shipment.value.basic,this.shipment.value.extra)
-    }
-    else {
+    if (this.shipment.value.isFastShipment) {
+      shipment = Object.assign(this.shipment.value.basic, this.shipment.value.extra);
+    } else {
       shipment = this.shipment.value.basic;
     }
 
-    let query = this.mapToQuery(this.getUrlSearchParams(shipment).paramsMap);
-    this.location.go("valuator", query);
+    const query = this.mapToQuery(this.getUrlSearchParams(shipment).paramsMap);
+    this.location.go('valuator', query);
 
     this.fetchProducts(shipment);
   }
 
-  mapToQuery(map):string{
-    let query:string='';
-    map.forEach((value, key, i, ) => {
-      query += key + "=" + value[0] + "&";
-    });
 
-    return query.substring(0, query.length-1);
+  isAllBasicParams(params, shipment): boolean {
+      for (const prop in shipment) {
+        if (!params.hasOwnProperty(prop)) {
+          return false;
+        }
+      }
+    return true;
   }
 
-  fetchProducts(params):void  {
+  mapToQuery(map): string {
+    let query: string;
+    map.forEach((value, key) => {
+      query += key + '=' + value[0] + '&';
+    });
+
+    return query.substring(0, query.length - 1);
+  }
+
+  fetchProducts(params): void  {
     this.productService.getProducts(this.getUrlSearchParams(params))
       .subscribe(
         productCategories => {
@@ -113,12 +121,12 @@ export class ValuatorComponent implements OnInit {
       );
   }
 
-  fetchCountries():void  {
+  fetchCountries(): void  {
     this.countryService.getCountries()
       .subscribe(
         countries => {
           this.countries = countries;
-          let polska = this.countries.find(el => el.name === "Polska");
+          const polska = this.countries.find(el => el.name === 'Polska');
 
           this.countries.splice(this.countries.indexOf(polska), 1);
           this.countries.unshift(polska);
@@ -129,10 +137,12 @@ export class ValuatorComponent implements OnInit {
       );
   }
 
-  getUrlSearchParams(params):URLSearchParams{
-    let searchParams: URLSearchParams = new URLSearchParams();
-    for (var prop in params) {
-      searchParams.set(prop, params[prop]);
+  getUrlSearchParams(params): URLSearchParams {
+    const searchParams: URLSearchParams = new URLSearchParams();
+    for (const prop in params) {
+      if (params.hasOwnProperty(prop)) {
+        searchParams.set(prop, params[prop]);
+      }
     }
 
     return searchParams;

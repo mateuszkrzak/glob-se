@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable }     from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Country } from '../models/country';
-import { EndpointService } from './endpoint.service'
+import { EndpointService } from './endpoint.service';
 
 @Injectable()
 export class CountryService {
-  constructor (private http: Http, private endPointService:EndpointService) {}
+  constructor (private http: Http, private endPointService: EndpointService) {}
 
   getCountries (): Observable<Country[]> {
-    return this.http.get(this.endPointService.getEndpoint() + "countries")
+    return this.http.get(this.endPointService.getEndpoint() + 'countries')
       .map(this.extractData)
       .catch(this.handleError);
   }

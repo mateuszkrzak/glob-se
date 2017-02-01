@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AboutComponent  {
   about = {
-    title: "O mnie",
-    description: "Lorem dipsum benchum pressum squatum"
+    title: 'O mnie',
+    description: 'Lorem dipsum benchum pressum squatum'
   };
 }
